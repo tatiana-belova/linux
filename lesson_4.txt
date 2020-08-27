@@ -25,9 +25,9 @@ kill 9 4463 (pid процесса nano). SIGKILL немедленно завер
 
 Задание 3. Изменить конфигурационный файл службы SSH: /etc/ssh/sshd_config, отключив аутентификацию по паролю PasswordAuthentication no.
 
-Чтобы это выпонлить, я при помощи команды sudo vim /etc/ssh/sshd_config открыла файл, и нашла строку PasswordAuthentication yes, где раскомментировала строку и изменила yes на no.
+Чтобы это выполнить, я при помощи команды sudo vim /etc/ssh/sshd_config открыла файл, и нашла строку PasswordAuthentication yes, где раскомментировала строку и изменила yes на no.
 
-Я выполнила systemctl restart sshd и затем при помощи команды sudo vim /etc/ssh/sshd_config снова открыла файл и поменяла PasswordAuthentication no обратно на yes.
+Я выполнила systemctl restart sshd, и затем при помощи команды sudo vim /etc/ssh/sshd_config снова открыла файл и поменяла PasswordAuthentication no обратно на yes.
 Затем я выполнила reload службы systemctl reload sshd. 
 
 В чём различие между действиями restart и reload? 
