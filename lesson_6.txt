@@ -1,0 +1,124 @@
+Задание 1.
+
+#!/bin/bash
+
+manual(){
+        cat << EOF
+This script erase empty strings and converts text to uppercase
+EOF
+}
+
+W=0 
+while [[ $# > 0 ]]
+do
+        case $1 in
+                --help)
+                        manual
+                        exit 0
+                ;;
+                -w|-write)
+                        W=1
+                ;;
+                *)
+for file in $FILES
+        do
+                if [ $W == 0 ]
+                then
+                        sed '/^$/d' $file | tr 'a-z' 'A-Z'
+                else
+                        sed '/^$/d' $file | tr 'a-z' 'A-Z' > file_tmp
+                        cat file_tmp > $file
+                        rm file_tmp
+                fi
+exit 0
+
+Задание 2.
+
+#!/bin/bash
+
+#echo $@
+#echo $0
+#echo $#
+#echo $1
+#echo $2
+#echo $3
+
+usage(){
+        cat <<EOF
+
+This script create files in a selected directory.
+   Usage: $0 [pattern] [selected directory] [file(s)]
+Options:
+   -d ( pointer to directory )
+ Examples:
+   $0 -d /tmp/newfolder file1
+   $0 -d /tmp/newfolder file1 file2 file.sh
+EOF
+}
+#if ( $1 != '-d') ; then
+#       echo "Error: The first pattern must be '-b'"
+#fi
+
+if (( $# < 3 )) ; then
+        echo "Error: No files for creating.
+        Error's code 1"
+        usage
+        exit 1
+        fi
+
+if [ -d $2 ]
+then
+        echo ""
+else
+        echo "Directory doesn't exist. Error code 2" && exit 2
+fi
+
+
+k=0
+for i in "$@"
+do
+        if [ $i = '-d' ]
+        then
+                let "k = k + 1"
+        fi
+done
+#echo "$k"
+if [ $k != 1 ]
+then
+         echo "Error: Not allow select more then one directory. Error code 3" && exit 3
+fi
+
+DIR=$2
+while [[ $# -gt 0 ]]
+do
+        if [ $1 = '-d' ] ; then
+                shift
+        fi
+        if [ $1 = $DIR ] ; then
+                shift
+        fi
+        case $1 in
+                */*)
+                        echo "Error: Forbidden symbol for file name"
+                        shift
+                        ;;
+        
+                *.sh)
+                        if [ -e $DIR/$1 ] ; then
+                                echo "Error: This file already exists. Error code 4" && exit 4
+                        else
+                                touch $DIR/$1
+                                chmod +x $DIR/$1
+                        fi
+                        shift
+                        ;;
+                *)
+                        if [ -e $DIR/$1 ] ; then
+                                echo "Error: This file already exists. Error code 4" && exit 4
+                        else
+                                touch $DIR/$1
+                        fi
+                        shift
+                        ;;
+        esac
+done
