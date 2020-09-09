@@ -1,0 +1,65 @@
+Задание 1. Подключить репозиторий с docker любым удобным способом, установить nginx используя утилиту apt потом удалить nginx, используя утилиту dpkg.
+
+Для подключения репозитория с docker я воспользовалась автоматическим скриптом: 
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+Затем я добавила себя как пользователя в группу docker:
+sudo usermod -aG docker tanbe
+
+Проверка работоспособности:
+sudo systemctl status docker
+
+Установка nginx при помощи утилиты apt:
+sudo apt update
+sudo apt install nginx
+
+Удаление nginx, с помощью утилиты dpkg:
+sudo dpkg -r nginx
+
+Задание 2. Установить nginx. Создать два виртуальных хоста, причем оба из них работают на порту 80. На http запрос утилиты curl при указанном хедере Host: host1, должен приходить ответ с текстом This is host 1 со статусом 200. При указании хедера Host: host2 - ответ с текстом This is host 2 со статусом 200.
+
+Установка nginx: 
+sudo apt install nginx
+
+Теперь нужно перейти в папку с файлом default:
+cd /etc/nginx/sites-enabled
+
+Создаю два файла:
+sudo touch host1
+
+Настраиваю:
+server {
+	listen	80;
+	server_name	host1;
+
+	location / {
+		return 200 "This is host 1";
+	}
+}
+
+
+sudo touch host2
+
+Настраиваю:
+server {
+	listen	80;
+	server_name	host2;
+
+	location / {
+		return 200 "This is host 2";
+	}
+}
+
+Поверяю синтаксис:
+sudo nginx -t
+
+Перезапускаю nginx:
+sudo systemctl restart nginx
+
+Проверка после перезапуска:
+curl http://localhost -H 'Host: host1'
+Ответ: This is host 1tanbe@ubuntu-linux:/etc/nginx/sites-enabled$ 
+curl http://localhost -H 'Host: host2'
+Ответ: This is host 2tanbe@ubuntu-linux:/etc/nginx/sites-enabled$ 
+
