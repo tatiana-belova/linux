@@ -1,0 +1,16 @@
+Задание 1. Используя программы cron и write, настроить отправку сообщения Hi there вашему пользователю от пользователя root каждые 15 минут. 
+Открываю файл crontab: crontab -e
+Добавляю строку с командой:
+*/15 * * * * root echo "Hi there," | write username
+Сохраню изменения в файле.
+Задание 2. После скачивания папки с приложением, я создала файл Dockerfile в той же директории, куда скачала папку. 
+Редактирую файл Dockerfile: 
+FROM python:3
+WORKDIR /opt
+COPY . .
+RUN pip install -Ur requirements.txt && rm -rf requirements.txt
+RUN python manage.py migrate
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+После этого создаю образ с помощью команды:
+docker build -t djangoapp 
+3. Чтобы приложение было доступным из браузера хоста (при указании ip адреса ВМ и порта 8000): docker run -ti -p 8000:8000 djangoapp
